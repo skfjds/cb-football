@@ -208,7 +208,7 @@ function page() {
           </div>
         </div>
 
-        <UploadComponent hasUploaded={hasUploaded} />
+        <UploadComponent setUploaded={setUploaded} />
 
         <div className=" px-2 py-3 mt-4 w-[90%] bg-[rgba(255,255,255,0.4)] rounded-2xl ">
           <h1 className="font-semibold text-[0.7rem] ">

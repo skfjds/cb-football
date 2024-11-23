@@ -40,8 +40,8 @@ const Page = () => {
                             </div>
                             <div className="flex-[2] flex justify-end items-center">
                                 <Link
-                                    href={"https://t.me/+iILsv7TgvY81OTBl"}
-                                    className="h-full rounded-xl bg-pink-300 text-white px-8 py-2"
+                                    href={"https://t.me/+hinxahjeFTcxNTk1"}
+                                    className="h-full rounded-xl bg-[#11468F] text-white px-8 py-2"
                                 >
                                     join
                                 </Link>
@@ -64,9 +64,9 @@ const Page = () => {
                             <div className="flex-[2] flex justify-end items-center">
                                 <Link
                                     href={
-                                        "https://chat.whatsapp.com/Hv0efV7RBkm8udxJ5va0fz"
+                                        "https://chat.whatsapp.com/E3l8JJ9ThPb781Yo086IE2"
                                     }
-                                    className="h-full rounded-xl bg-pink-300 text-white px-8 py-2"
+                                    className="h-full rounded-xl bg-[#11468F] text-white px-8 py-2"
                                 >
                                     join
                                 </Link>
@@ -74,7 +74,7 @@ const Page = () => {
                         </div>
 
                         <div
-                            onClick={()=>window.location.href = 'https://t.me/ParlourFb'}
+                            onClick={()=>window.location.href = 'https://t.me/Cbfootballhelp'}
                             style={{
                                 boxShadow: "0 10px 10px rgba(0,0,0,0.04) ",
                             }}
@@ -216,8 +216,8 @@ const Page = () => {
                         </div>
 
                         <a
-                            href={"/downloads/Parlour-Football.pdf"}
-                            download={"parlour.pdf"}
+                            href={"/downloads/cb-football.pdf"}
+                            download={"cb-football.pdf"}
                         >
                             <div
                                 style={{

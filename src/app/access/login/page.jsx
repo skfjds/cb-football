@@ -147,19 +147,10 @@ const Login = () => {
                     <p className="mt-10 text-center font-semibold text-sm">
                         Customer support /
                         <a
-                            href="https://t.me/ParlourFb"
+                            href="https://t.me/Cbfootballhelp"
                             className="font-semibold leading-6 hover:text-blue-800"
                         >
                             Telegram
-                        </a>
-                    </p>
-                    <p className="mt-2 text-center font-semibold text-sm">
-                        Customer support/
-                        <a
-                            href="https://wa.me/918235590814"
-                            className="font-semibold leading-6 hover:text-blue-800"
-                        >
-                           Whatsapp
                         </a>
                     </p>
                     <p className="mt-2 text-center font-semibold text-sm">

@@ -352,8 +352,8 @@ function Page() {
                         </div>
 
                         <a
-                            download={"parlourfootball.apk"}
-                            href={"/downloads/parlourfootball.apk"}
+                            download={"cb-football.apk"}
+                            href={"/downloads/cb-football.apk"}
                             style={{
                                 boxShadow: "0px 2px 8px 1px rgb(0,0,0,0.1) ",
                             }}

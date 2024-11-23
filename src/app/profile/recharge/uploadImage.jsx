@@ -5,7 +5,7 @@ const UploadComponent = ({setUploaded}) => {
   const [file, setFile] = useState(null);
   const [uploading, setUploading] = useState(false);
   const [uploadedImageUrl, setUploadedImageUrl] = useState("");
-
+  
   const handleFileChange = (event) => {
     setFile(event.target.files[0]);
   };
@@ -20,7 +20,7 @@ const UploadComponent = ({setUploaded}) => {
 
     try {
       // Get authentication parameters from the backend
-      const res = await (await fetch("/api/imageKitAuth")).json();
+      const res = await (await fetch(`/api/imageKitAuth?tmsmt=${Date.now()}`)).json();
       console.log(res);
 
       // Create a form data object
@@ -55,11 +55,17 @@ const UploadComponent = ({setUploaded}) => {
     <div className=" text-sm px-4 my-4">
       <h5 className="text-red-400 py-2" >Upload the screenshort of the payment</h5>
       <input type="file" onChange={handleFileChange} />
-      <button className="bg-blue-700 text-white px-4 py-1 rounded-sm" onClick={handleUpload} disabled={uploading}>
-        <h5>
-            {uploading ? "Uploading..." : "Upload"}
-        </h5>
-      </button>
+      {
+        !uploadedImageUrl ? (
+          <button className="bg-blue-700 text-white px-4 py-1 rounded-sm" onClick={handleUpload} disabled={uploading}>
+            <h5>
+                {uploading ? "Uploading..." : "Upload"}
+            </h5>
+          </button>
+        ):(
+          null
+        )
+      }
       {uploadedImageUrl && (
         <div>
           <p>Uploaded Image:</p>

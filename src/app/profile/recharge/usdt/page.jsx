@@ -214,7 +214,7 @@ function Page() {
             </div>
           </div>
 
-          <UploadComponent hasUploaded={hasUploaded} />
+          <UploadComponent setUploaded={setUploaded} />
 
           <div className="mt-4 ">
             <p className="font-[500] text-[.7rem] ">Transaction Id</p>

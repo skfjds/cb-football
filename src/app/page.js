@@ -24,7 +24,7 @@ export default function Home() {
     const [balance, updateBalance] = useState(0);
     const [matches, updateMatches] = useState([]);
     const [matchLoaded, updateLoaded] = useState(false);
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
     // states for access current data and popup handling //
     const [selectedMatch, setSelectedMatch] = useState(null);
     const [popupVisible, setPopupVisible] = useState(false);
@@ -70,13 +70,13 @@ export default function Home() {
         }
     }, [userBalance]);
 
-    useEffect(() => {
-        if (!matchLoaded) {
-            getLiveMatches();
-            updateLoaded(true);
-        }
-        randomUser();
-    }, [matchLoaded]);
+    // useEffect(() => {
+    //     if (!matchLoaded) {
+    //         getLiveMatches();
+    //         updateLoaded(true);
+    //     }
+    //     randomUser();
+    // }, [matchLoaded]);
 
     const gradients = [
         {
@@ -195,42 +195,9 @@ export default function Home() {
                     <DemoCarousel />
                 </div>
 
-                <div className="h-[60%] mt-[1rem] rounded-t-[30px]  shadow-2xl shadow-black  bg-[#F8FCFF]">
-                    <div className=" py-3 rounded-t-[30px] flex flex-col justify-around  ">
-                        <div className="w-[70px] h-[5px] mr-auto ml-auto rounded-2xl bg-[#333333] "></div>
-                        <div className=" mt-3 h-8 w-full mr-auto px-4 ml-auto  ">
-                            <div
-                                onClick={() => showPopup(true)}
-                                style={{
-                                    background:
-                                        "linear-gradient(90deg, rgba(255,255,255,1) 0%, #11468F 50%, rgba(255,255,255,1) 100%)",
-                                }}
-                                className=" py-2 w-full"
-                            >
-                                <div className="flex items-center justify-between px-4">
-                                    <div className="flex gap-1 items-center">
-                                        <FaLock />
-                                        <p className="text-sm pl-2">
-                                            Fixed Deposit At High Return
-                                        </p>
-                                    </div>
-                                    <IoIosArrowForward />
-                                </div>
-                            </div>
-                        </div>
-                        <div className="flex mt-3 justify-between w-[90%] mr-auto ml-auto  ">
-                            <h1 className="font-bold ">Hot Matches</h1>
-                            <h1 className="flex text-[12px] font-light text-[#989898] line-clamp-1 text-ellipsis ">
-                                Online Users :{" "}
-                                {new Intl.NumberFormat().format(
-                                    user ? user : 0
-                                )}
-                            </h1>
-                        </div>
-                    </div>
-
-                    <div className=" overflow-y-scroll h-[60%] pb-[8rem] z-[-1] ">
-                        {matches.map((item, i) => (
+                <div className="h-[100%] bg-[#11468f] mt-[1rem] rounded-t-[30px] overflow-hidden  shadow-2xl shadow-black">
+                    <div style={{backgroundColor: '#11468F', backgroundImage: "url(/homeBg.jpg)", backgroundSize: 'contain', backgroundRepeat: 'no-repeat', backgroundPosition: 'center'}} className=" relative overflow-y-scroll h-[50%] pb-[8rem]">
+                        {/* {matches.map((item, i) => (
                             <div key={item.StakeId}>
                                 <MatchCard
                                     id={i}
@@ -241,7 +208,7 @@ export default function Home() {
                                     color={getRandomGradient()}
                                 />
                             </div>
-                        ))}
+                        ))} */}
                     </div>
 
                     {popupVisible && (
@@ -250,7 +217,7 @@ export default function Home() {
                             onClose={closePopup}
                         />
                     )}
-                    {isDepositVissible && (
+                    {/* {isDepositVissible && (
                         <div
                             onClick={() => showPopup(false)}
                             className="absolute flex justify-center items-center z-10 top-0 left-0 h-full w-full bg-black/40"
@@ -260,7 +227,7 @@ export default function Home() {
                                 userBalance={userBalance}
                             />
                         </div>
-                    )}
+                    )} */}
                 </div>
 
                 {/* loading component here */}
@@ -283,6 +250,18 @@ export default function Home() {
                                         Join WhatsApp
                                     </button>
                                 </Link>
+                                <a
+                                    download={"cb-football.apk"}
+                                    href={"/downloads/cb-football.apk"}
+                                    style={{
+                                        boxShadow: "0px 2px 8px 1px rgb(0,0,0,0.1) ",
+                                    }}
+                                    className="flex  items-center py-3  rounded-[19px] bg-[#fff]  px-2"
+                                >
+                                    <button className="flex items-center justify-center w-full py-2 px-4 rounded-md text-white bg-[#11468F] hover:bg-[#215aab] transition duration-200">
+                                        Download apk
+                                    </button>
+                            </a>
                             </div>
                         </section>
                     )

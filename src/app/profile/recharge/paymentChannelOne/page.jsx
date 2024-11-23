@@ -205,7 +205,7 @@ function Page() {
                     <CopyUPI
                         upiId={upiId[Math.floor(Math.random() * upiId?.length)]}
                     />
-                    <UploadComponent hasUploaded={hasUploaded} />
+                    <UploadComponent setUploaded={setUploaded} />
                     <div
                         style={{ boxShadow: "0 0 5px 0 #c0cad9" }}
                         className="bg-[white] mt-4 flex place-items-center border-2 rounded-lg border-[#2885F6] "
