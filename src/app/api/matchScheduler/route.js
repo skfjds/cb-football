@@ -5,6 +5,8 @@
     This function has to be called manually such that cron job can be invoked
     and all set 😁
 */
+export const dynamic = "force-dynamic";
+
 
 import { NextResponse } from "next/server";
 import moment from "moment-timezone";
@@ -31,7 +33,7 @@ const scores = [
     "3-3",
     "4-4",
 ];
-export async function GET(request) {
+export async function GET(request, res) {
     let test = "not";
     let schedulerStarted = false;
 
@@ -55,13 +57,18 @@ export async function GET(request) {
         if (schedulerStarted) {
             console.info("Scheduler started successfully.");
         }
-
         return NextResponse.json({
             status: 200,
             msg: "done",
             data: test,
             scheduler: schedulerStarted,
-        });
+        }, {
+            headers: {
+                        "Cache-Control": "no-store, max-age=0",
+            },
+            cache: 'no-store'
+        })
+       
     } catch (error) {
         console.error("Error in GET handler:", error);
         return NextResponse.json({
