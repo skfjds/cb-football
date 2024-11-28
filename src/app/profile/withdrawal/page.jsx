@@ -464,13 +464,7 @@ function Page() {
                                                     type="number"
                                                     disabled
                                                     value={
-                                                        Amount -
-                                                        Number(
-                                                            (
-                                                                (Amount / 100) *
-                                                                12
-                                                            ).toFixed(2)
-                                                        )
+                                                        Number(((Amount * 0.9) / 100).toFixed(2))
                                                     }
                                                     className="w-full h-full outline-none text-green-600"
                                                     name=""
@@ -546,14 +540,8 @@ function Page() {
                                                 <input
                                                     type="number"
                                                     disabled
-                                                    value={(
-                                                        (Amount -
-                                                            Number(
-                                                                Amount / 100
-                                                            ) *
-                                                                12) /
-                                                        80
-                                                    ).toFixed(2)}
+                                                    value={
+                                                        Number(((Amount * 0.9)).toFixed(2))}
                                                     placeholder="0"
                                                     className="w-full h-full outline-none text-green-600"
                                                     name=""
