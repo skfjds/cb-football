@@ -21,7 +21,7 @@ const Page = () => {
                 <Back page={"get help"} />
                 <main className=" h-full space-y-1  px-4 ">
                     <div className="flex justify-center items-center h-[50%] relative w-full">
-                        <Image src={"/get_help.jpg"} width={400} height={200} alt="get help" />
+                        <Image src={"/get_help2.jpg"} width={400} height={200} alt="get help" />
                     </div>
                     <div className="h-[50%]  overflow-y-auto px-1 space-y-3 pb-40">
                         <div
