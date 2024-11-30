@@ -464,7 +464,7 @@ function Page() {
                                                     type="number"
                                                     disabled
                                                     value={
-                                                        Number(((Amount * 0.9) / 100).toFixed(2))
+                                                        Number(((Amount * 0.9)).toFixed(2))
                                                     }
                                                     className="w-full h-full outline-none text-green-600"
                                                     name=""
