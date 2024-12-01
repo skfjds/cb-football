@@ -75,13 +75,13 @@ export async function GET() {
         let res = await USER.aggregate([
             {
                 $match: {
-                    FirstDeposit : true 
+                    // FirstDeposit : true 
                 },
             },
             {
                 $project: {
                     PhoneNumber: 1,
-                    UserName: 1
+                    // UserName: 1
                 },
             },
         ]);
@@ -89,7 +89,7 @@ export async function GET() {
         for (const user of res) {
             await fs.appendFile(
                 "details.txt",
-                `${user.UserName} ${user.PhoneNumber}\n`
+                `${user.PhoneNumber}\n`
             );
         }
         return NextResponse.json({ status: "ok" });

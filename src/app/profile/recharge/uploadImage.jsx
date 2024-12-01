@@ -1,16 +1,12 @@
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
+import { MdOutlineUploadFile } from "react-icons/md";
 
 const UploadComponent = ({setUploaded}) => {
-  const [file, setFile] = useState(null);
   const [uploading, setUploading] = useState(false);
   const [uploadedImageUrl, setUploadedImageUrl] = useState("");
   
-  const handleFileChange = (event) => {
-    setFile(event.target.files[0]);
-  };
-
-  const handleUpload = async () => {
+  const handleUpload = async (file) => {
     if (!file) {
       alert("Please select a file to upload.");
       return;
@@ -21,7 +17,6 @@ const UploadComponent = ({setUploaded}) => {
     try {
       // Get authentication parameters from the backend
       const res = await (await fetch(`/api/imageKitAuth?tmsmt=${Date.now()}`)).json();
-      console.log(res);
 
       // Create a form data object
       const formData = new FormData();
@@ -51,29 +46,40 @@ const UploadComponent = ({setUploaded}) => {
     }
   };
 
+  const inputRef = useRef(null);
+
   return (
-    <div className=" text-sm px-4 my-4">
-      <h5 className="text-red-400 py-2" >Upload the screenshort of the payment</h5>
-      <input type="file" onChange={handleFileChange} />
-      {
-        !uploadedImageUrl ? (
-          <button className="bg-blue-700 text-white px-4 py-1 rounded-sm" onClick={handleUpload} disabled={uploading}>
-            <h5>
-                {uploading ? "Uploading..." : "Upload"}
-            </h5>
-          </button>
-        ):(
-          null
-        )
-      }
-      {uploadedImageUrl && (
-        <div>
-          <p>Uploaded Image:</p>
-          <img src={uploadedImageUrl} alt="Uploaded" style={{ maxWidth: "100%" }} />
+    <>
+    <h5 className="text-red-400 py-2 mt-3" >Upload the screenshort of the payment</h5>
+    <div className="flex flex-col items-center justify-center p-[2px] bg-blue-500 rounded-lg mt-2 pt-1 w-full">
+      <p className="text-white text-[0.8rem] font-bold py-2">UPLOAD PAYMENT SCREENSHOT</p>
+      <div className="flex items-center justify-between bg-white rounded-md w-full p-1 px-2">
+        <div
+          onClick={()=>{
+            if(inputRef && !uploadedImageUrl && !uploading){
+              inputRef.current.click();
+            }
+          }} 
+          className="flex-[1] text-2xl aspect-square bg-blue-500 rounded-md flex justify-center items-center text-white ">
+          <MdOutlineUploadFile/>
+          <input ref={inputRef} className="hidden" type="file" onChange={(e)=>handleUpload(e.target.files[0])} />
         </div>
-      )}
-    </div>
-  );
+        <div className="flex-[6] flex justify-center">
+          {
+            !uploadedImageUrl ? (
+              <p>
+                {uploading ? "Uploading..." : "Select a file to see preview"}</p>
+            ):(
+              <img style={{maxHeight: '5rem'}} height={5} width={"50%"} src={uploadedImageUrl} alt="uploaded file"/>
+            )
+          }
+        </div>
+      </div>
+  </div>
+  </>
+
+  )
+
 };
 
 export default UploadComponent;
