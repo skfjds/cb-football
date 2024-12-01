@@ -63,7 +63,7 @@ const Page = async () => {
                     </div>
                 </div>
                 <div className="divide-y-2 divide-gray-300">
-                    {data.map((ele, idx) => (
+                    {data?.map((ele, idx) => (
                         <BetCard
                             key={idx}
                             data={JSON.parse(JSON.stringify(ele))}
@@ -169,10 +169,11 @@ async function getAllBets() {
             },
         ]);
         for (let bet of data) {
-            let count = await BET.find({
+            let count = await BET.countDocuments({
                 StakeId: bet?.StakeId,
                 Status: 0,
-            }).count();
+            })
+
             data[data.indexOf(bet)]["Count"] = count;
         }
         data.reverse();
