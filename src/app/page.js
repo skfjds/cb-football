@@ -17,7 +17,7 @@ import DemoCarousel from "./components/DemoCarousel";
 import { BsArrowRight, BsLock } from "react-icons/bs";
 import { duration } from "moment-timezone";
 import Link from "next/link";
-import { Matches } from "./matches/page";
+import { Matches } from "./matches/Match";
 
 export default function Home() {
     let router = useRouter();
