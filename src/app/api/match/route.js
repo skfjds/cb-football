@@ -38,7 +38,7 @@ export async function GET(request) {
 
         //extracted match will return the live matches that are going to start 6 minutes from now;
         let ExtractedMatches = await getExtractedMatches(matches);
-        await settleFixDeposit(UserName);
+        // await settleFixDeposit(UserName);
 
         return NextResponse.json({
             status: 200,
@@ -113,7 +113,15 @@ async function getExtractedMatches(matches) {
             })
         );
         if (match_date.getTime() - today.getTime() < 6 * 60 * 1000) continue;
-        ExtractedMatches.push(match);
+        
+        // Extract hours from the match start time
+        let matchHour = match_date.getHours();
+
+        // Check if the match starts between 9 PM and 12 AM
+        if (matchHour >= 21 && matchHour < 24) {
+            ExtractedMatches.push(match);
+        }
+
     }
     return ExtractedMatches;
 }

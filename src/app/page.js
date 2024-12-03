@@ -17,6 +17,7 @@ import DemoCarousel from "./components/DemoCarousel";
 import { BsArrowRight, BsLock } from "react-icons/bs";
 import { duration } from "moment-timezone";
 import Link from "next/link";
+import { Matches } from "./matches/page";
 
 export default function Home() {
     let router = useRouter();
@@ -70,13 +71,13 @@ export default function Home() {
         }
     }, [userBalance]);
 
-    // useEffect(() => {
-    //     if (!matchLoaded) {
-    //         getLiveMatches();
-    //         updateLoaded(true);
-    //     }
-    //     randomUser();
-    // }, [matchLoaded]);
+    useEffect(() => {
+        if (!matchLoaded) {
+            getLiveMatches();
+            updateLoaded(true);
+        }
+        randomUser();
+    }, [matchLoaded]);
 
     const gradients = [
         {
@@ -195,20 +196,9 @@ export default function Home() {
                     <DemoCarousel />
                 </div>
 
-                <div className="h-[100%] bg-[#11468f] mt-[1rem] rounded-t-[30px] overflow-hidden  shadow-2xl shadow-black">
-                    <div style={{backgroundColor: '#11468F', backgroundImage: "url(/homeBg.jpg)", backgroundSize: 'contain', backgroundRepeat: 'no-repeat', backgroundPosition: 'center'}} className=" relative overflow-y-scroll h-[50%] pb-[8rem]">
-                        {/* {matches.map((item, i) => (
-                            <div key={item.StakeId}>
-                                <MatchCard
-                                    id={i}
-                                    index={i}
-                                    data={{ ...item }}
-                                    gradient={gradients[i]}
-                                    onClick={() => handleMatchCardClick(item)}
-                                    color={getRandomGradient()}
-                                />
-                            </div>
-                        ))} */}
+                <div className="h-[100%] bg-white mt-[1rem] rounded-t-[30px] overflow-hidden  shadow-2xl shadow-black">
+                    <div className=" overflow-y-scroll">
+                        <Matches/>
                     </div>
 
                     {popupVisible && (

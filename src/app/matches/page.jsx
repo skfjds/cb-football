@@ -9,7 +9,7 @@ import { useRouter } from "next/navigation";
 import { UserContext } from "../helpers/UserContext";
 import Loading from "../components/Loading";
 
-function Page() {
+export function Matches() {
   const { userBalance, getBalance } = useContext(UserContext);
   const [isPlaceBet, togglePlaceBet] = useState(false);
   const [placeBetData, updatePlaceBetData] = useState({});
@@ -82,14 +82,14 @@ function Page() {
 
   return (
     <Layout>
-      <section className="bg-[#f7f8ff] relative h-[100dvh]">
+      <section className="bg-[#f7f8ff] h-[100dvh]">
         {/* {loading && <Loading />} */}
         <div className="relative text-center py-4 h-[8%] ">
           <h2 className=" capitalize text-[0.65rem] font-bold my-0">matches</h2>
         </div>
         <main className=" space-y-4  h-[92%] ">
           {/* search box */}
-          <div className="relative px-4 flex-col  h-[15%] max-h-[4rem] flex items-center ">
+          {/* <div className="relative px-4 flex-col  h-[15%] max-h-[4rem] flex items-center ">
             <div className="w-full relative">
               <input
                 type="text"
@@ -123,7 +123,7 @@ function Page() {
                 })}
               </div>
             )}
-          </div>
+          </div> */}
           <div
             ref={matches_box}
             style={{
@@ -164,4 +164,4 @@ function Page() {
   );
 }
 
-export default Page;
+// export default Page;
