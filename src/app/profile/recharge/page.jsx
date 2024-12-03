@@ -37,7 +37,7 @@ function Page() {
   }, []);
 
   // implementing condtion based redireacting
-  const [selectedOption, setSelectedOption] = useState("");
+  const [selectedOption, setSelectedOption] = useState("option1");
   const handleOptionChange = (e) => {
     setSelectedOption(e.target.value);
   };
@@ -200,7 +200,7 @@ function Page() {
                 />
               </div>
 
-              <div
+              {/* <div
                 style={{ boxShadow: "0 2px 5px rgb(0,0,0,0.06)" }}
                 className="flex justify-between  px-2 py-3 place-items-center mt-2 w-[98%] mr-auto ml-auto rounded-lg bg-white "
               >
@@ -213,7 +213,7 @@ function Page() {
                   checked={selectedOption === "option2"}
                   onChange={handleOptionChange}
                 />
-              </div>
+              </div> */}
 
               <div
                 style={{ boxShadow: "0 2px 5px rgb(0,0,0,0.06)" }}

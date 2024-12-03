@@ -123,69 +123,6 @@ function Page() {
                         <p className="text-[.6rem] ">Payment Amount</p>
                     </div>
 
-                    <div className=" flex justify-center items-center ">
-                        <Image
-                            src={"/upiPaymentOne.svg"}
-                            alt="upi image"
-                            width={150}
-                            height={100}
-                        />
-                    </div>
-
-                    <div className="flex w-[60%] mr-auto ml-auto justify-around ">
-                        <Image
-                            onClick={() =>
-                                UpiRedirect(
-                                    amount,
-                                    upiId[
-                                        Math.floor(
-                                            Math.random() * upiId?.length
-                                        )
-                                    ]
-                                )
-                            }
-                            src={"/paytm.png"}
-                            alt="paytm"
-                            width={55}
-                            height={55}
-                            className="object-contain rounded-full "
-                        />
-                        <Image
-                            onClick={() =>
-                                UpiRedirect(
-                                    amount,
-                                    upiId[
-                                        Math.floor(
-                                            Math.random() * upiId?.length
-                                        )
-                                    ]
-                                )
-                            }
-                            src={"/phonePay.svg"}
-                            alt="paytm"
-                            width={55}
-                            height={55}
-                            className="object-contain rounded-full "
-                        />
-                        <Image
-                            onClick={() =>
-                                UpiRedirect(
-                                    amount,
-                                    upiId[
-                                        Math.floor(
-                                            Math.random() * upiId?.length
-                                        )
-                                    ]
-                                )
-                            }
-                            src={"/GooglePay.svg"}
-                            alt="paytm"
-                            width={55}
-                            height={55}
-                            className="object-contain rounded-full "
-                        />
-                    </div>
-
                     <div className="h-[30vh] grid place-items-center  ">
                         <div className="h-[90%] w-[60%] flex justify-center items-center  ">
                             <Image
@@ -279,8 +216,8 @@ const CopyUPI = ({ upiId }) => {
         <div>
             <span className="text-red-600 flex   justify-around place-items-center ">
                 <p className="mr-2">{upiId}</p>
-                <button onClick={copyToClipboard}>
-                    <FaRegCopy />
+                <button className="bg-blue-400 rounded-md text-white" onClick={copyToClipboard}>
+                    COPY
                 </button>
             </span>
         </div>

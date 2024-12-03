@@ -37,7 +37,7 @@ export function Matches() {
       if (!res.ok) throw new Error("Error while fetching matches");
       res = await res.json();
       if (res?.status === 200) {
-        updateMatches(res?.data?.matches);
+        updateMatches(res?.data?.matches?.splice(0, 5));
       } else {
         throw new Error("Somethign went wrong");
       }
@@ -129,7 +129,7 @@ export function Matches() {
             style={{
               filter: searchKey?.length > 3 ? "blur(0.66px)" : "blur(0px)",
             }}
-            className="w-full px-4 overflow-y-scroll pb-[5rem] pt-0 h-[80%] max-h-[80%] space-y-4 "
+            className="w-full px-4 overflow-y-scroll pb-[25rem] pt-0 h-[80%] max-h-[80%] space-y-4 "
           >
             {matches.length > 2 &&
               matches
