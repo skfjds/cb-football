@@ -61,8 +61,7 @@ async function settleDeposit(data) {
     Session.startTransaction();
     try {
         await connect();
-        let amm_updated =
-            data?.Amount <= 1000 ? Number(data?.Amount) * 100 : data?.Amount;
+        let amm_updated = data?.Amount;
         // const vip_level = getVipLevel(Number(amm_updated) / 100);
         const vip_level = 0;
         //  if first deposit give 2% reward to the parent;

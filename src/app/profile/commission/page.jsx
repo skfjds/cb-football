@@ -347,7 +347,7 @@ const Page = () => {
                                 new deposit
                             </div>
                             <div className="h-full  w-full flex-[2] capitalize font-bold text-[0.6rem] text-gray-400 flex items-center justify-between">
-                                <h2>{total_deposit || 0} total deposit</h2>
+                                <h2>{total_deposit || 0} today&apos; deposit</h2>
                             </div>
                             <div className="h-full w-full flex justify-center items-center flex-[1]">
                                 <div className="p-1 rounded-full bg-gray-200 text-sm">

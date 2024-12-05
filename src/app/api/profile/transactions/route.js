@@ -52,9 +52,14 @@ export async function GET(request) {
         });
 
         const calculateTotal = (transactions) => {
+            let today = new Date();
+            let date = `${today?.getDate()}/${
+                today?.getMonth() + 1
+            }/${today?.getFullYear()}`;
+
             return transactions.reduce(
                 (acc, curr) => {
-                    if (curr.Type === "deposit") {
+                    if (curr.Type === "deposit" && curr.Date === date) {
                         acc.total_deposit =
                             (acc.total_deposit || 0) +
                             parseFloat(curr.Amount) / 100;
