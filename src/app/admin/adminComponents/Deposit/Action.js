@@ -129,12 +129,12 @@ async function settleDeposit(data) {
                 {
                     UserName: data?.UserName,
                     TransactionId: data?.prevTransactionId,
-                    Amount: amm_updated,
                     Status: 0,
                 },
                 {
                     Remark: data?.Remark,
                     Status: 1,
+                    Amount: amm_updated,
                     TransactionId: data?.TransactionId,
                 },
                 {

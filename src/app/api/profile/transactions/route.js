@@ -59,10 +59,14 @@ export async function GET(request) {
 
             return transactions.reduce(
                 (acc, curr) => {
-                    if (curr.Type === "deposit" && curr.Date === date) {
-                        acc.total_deposit =
-                            (acc.total_deposit || 0) +
+                    if (curr.Type === "deposit") {
+                        if(curr.Date === date){
+                            acc.today_deposit = (acc.today_deposit || 0) +
                             parseFloat(curr.Amount) / 100;
+                        }
+                        acc.total_deposit =
+                        (acc.total_deposit || 0) +
+                        parseFloat(curr.Amount) / 100;
                     } else if (curr.Type === "withdrawal") {
                         acc.total_withdrawal =
                             (acc.total_withdrawal || 0) +
@@ -70,20 +74,23 @@ export async function GET(request) {
                     }
                     return acc;
                 },
-                { total_deposit: 0, total_withdrawal: 0 }
+                { total_deposit: 0, today_deposit: 0, total_withdrawal: 0 }
             );
         };
 
         const {
             total_deposit: total_deposit_level1,
+            today_deposit: today_deposit1,
             total_withdrawal: total_withdrawal_level1,
         } = calculateTotal(level1_transactions);
         const {
             total_deposit: total_deposit_level2,
+            today_deposit: today_deposit2,
             total_withdrawal: total_withdrawal_level2,
         } = calculateTotal(level2_transactions);
         const {
             total_deposit: total_deposit_level3,
+            today_deposit: today_deposit3,
             total_withdrawal: total_withdrawal_level3,
         } = calculateTotal(level3_transactions);
 
@@ -98,6 +105,9 @@ export async function GET(request) {
                     total_deposit_level1 +
                         total_deposit_level2 +
                         total_deposit_level3
+                ),
+                today_deposit : Number(
+                    today_deposit1 + today_deposit2 + today_deposit3
                 ),
                 total_withdrawal: Number(
                     total_withdrawal_level1 +

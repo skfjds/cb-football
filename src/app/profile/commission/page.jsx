@@ -26,6 +26,7 @@ const Page = () => {
     const [overallCommission, updateOverallCommission] = useState([]);
     const [weekCommission, updateWeeklyCommission] = useState([]);
     const [total_deposit, updateTotalDeposit] = useState(0);
+    const [today_deposit, updateTodayDeposit] = useState(0);
     const [total_withdrawal, updateTotalWithdrawal] = useState(0);
     const [commissionData, updateCommissionData] = useState(0);
     const { userBalance, userOtherData, getBalance } = useContext(UserContext);
@@ -109,10 +110,12 @@ const Page = () => {
                     level2_transactions,
                     level3_transactions,
                     total_deposit,
+                    today_deposit,
                     total_withdrawal,
                 } = res?.data;
                 updateTotalDeposit(total_deposit);
                 updateTotalWithdrawal(total_withdrawal);
+                updateTodayDeposit(today_deposit)
                 updateTransactionData({
                     level1: level1_transactions,
                     level2: level2_transactions,
@@ -329,10 +332,18 @@ const Page = () => {
                         </div>
                     )}
                 </main>
+                <div className="mt-4 px-6 flex gap-x-3">
+                    <div className="h-full pl-2 w-fit text-nowrap text-[0.6rem] font-semibold capitalize ">
+                        Today&apos;s deposit
+                    </div>
+                    <div className="h-full  w-full capitalize font-bold text-[0.6rem] text-gray-400 ">
+                        <h2>{today_deposit || 0} today&apos; deposit</h2>
+                    </div>
+                </div>
                 <div
                     className={`${
-                        isShairing ? " h-[30%] mt-3 " : " h-[60%] mt-10 "
-                    } pt-2  shadow-gray-900 rounded-t-[1.5rem]`}
+                        isShairing ? " h-[30%]" : " h-[60%] mt-10 "
+                    }  shadow-gray-900 rounded-t-[1.5rem]`}
                 >
                     <div className="h-full overflow-y-scroll pb-40 px-4">
                         {/* claim button */}
@@ -344,10 +355,10 @@ const Page = () => {
                             className="shadow-md flex mt-3 items-center py-[0.7rem] bg-[#FFF]  rounded-2xl  px-2"
                         >
                             <div className="h-full pl-2  w-full flex text-[0.6rem] font-semibold capitalize  items-center flex-[2]">
-                                new deposit
+                                Total deposit
                             </div>
                             <div className="h-full  w-full flex-[2] capitalize font-bold text-[0.6rem] text-gray-400 flex items-center justify-between">
-                                <h2>{total_deposit || 0} today&apos; deposit</h2>
+                                <h2>{total_deposit || 0} total deposit</h2>
                             </div>
                             <div className="h-full w-full flex justify-center items-center flex-[1]">
                                 <div className="p-1 rounded-full bg-gray-200 text-sm">
