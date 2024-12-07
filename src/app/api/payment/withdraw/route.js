@@ -34,7 +34,7 @@ export async function POST(request) {
         if (!(await validateTime()))
             throw new CustomError(
                 705,
-                "you can withdraw from 10:00 AM to 16:00 PM UTC on working days i.e Monday to Friday."
+                "you can withdraw from 10:00 AM to 16:00 PM UTC on working days i.e Monday to Saturday."
             );
 
         if (!Amount) throw new CustomError(705, "Enter a valid amount", {});
@@ -221,7 +221,7 @@ async function validateTime() {
     const currentHour = Number(currentDate.getHours());
 
     // Check if it's Sunday or outside the working hours (10 am to 4 pm)
-    if (currentDay === 0 || currentDay === 6 || currentHour < 10 || currentHour >= 16) {
+    if (currentDay === 0 || currentHour < 10 || currentHour >= 16) {
         return false;
     }
 
