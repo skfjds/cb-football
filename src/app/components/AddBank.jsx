@@ -209,34 +209,36 @@ const AddBank = ({ closePopup, localEditable, usdtEditable , isUpdatingBank }) =
                   />
                 </div>
               ))
-            : usdtBank.map((ele, idx) => (
-                <div key={idx} className="text-sm">
-                  <div className="flex  items-center justify-between">
-                    <label
-                      htmlFor="AccountHolderName"
-                      className="block text-[0.6rem] capitalize font-semibold p-1 text-black"
-                    >
-                      {ele.label}
-                    </label>
-                  </div>
-                  <Input
-                    credentials={usdtBankCredentials}
-                    inputType={ele.type}
-                    id={ele.name}
-                    name={ele.name}
-                    alt={ele.alt}
-                    length={50}
-                    image="user.png"
-                    update={updateUsdt}
-                  />
-                </div>
-              ))}
+            : null
+            // usdtBank.map((ele, idx) => (
+            //     <div key={idx} className="text-sm">
+            //       <div className="flex  items-center justify-between">
+            //         <label
+            //           htmlFor="AccountHolderName"
+            //           className="block text-[0.6rem] capitalize font-semibold p-1 text-black"
+            //         >
+            //           {ele.label}
+            //         </label>
+            //       </div>
+            //       <Input
+            //         credentials={usdtBankCredentials}
+            //         inputType={ele.type}
+            //         id={ele.name}
+            //         name={ele.name}
+            //         alt={ele.alt}
+            //         length={50}
+            //         image="user.png"
+            //         update={updateUsdt}
+            //       />
+            //     </div>
+            //   ))
+              }
         </div>
 
         <div className="px-5 mt-8">
           <button
             onClick={sendNewBankData}
-            className=" rounded-md text-white font-bold tracking-wider capitalize w-full py-3 bg-pink-300"
+            className=" rounded-md text-white font-bold tracking-wider capitalize w-full py-3 bg-blue-600"
           >
             save my bank details
           </button>

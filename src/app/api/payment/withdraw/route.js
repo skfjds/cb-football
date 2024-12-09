@@ -162,6 +162,7 @@ async function updateUser(UserName, Amount, Session, Bank, WithdrawCode) {
         parent = user?.Parent;
         return true;
     } catch (error) {
+        console.log(error, Amount, Bank, WithdrawCode, UserName);
         if (error?.code === 500 || error?.status === 500 || !error?.status) {
             ErrorReport(error);
         }

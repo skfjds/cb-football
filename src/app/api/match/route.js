@@ -184,7 +184,7 @@ export async function POST(request) {
                 "minimum bet amount is 200 , kindly recharge or increase the bet amount."
             );
         }
-        BetAmount = BetAmount * 100;
+        BetAmount = Math.floor(BetAmount) * 100;
 
         let user_updated = await USER.findOneAndUpdate(
             {
