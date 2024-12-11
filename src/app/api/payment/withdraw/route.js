@@ -23,6 +23,9 @@ export async function POST(request) {
     let { session, token } = await getCookieData();
     try {
         const UserName = await isValidUser(token, session);
+        if(!UserName){
+            console.log('reciving in withdrwal api' , new Date().toDateString());
+        }
         if (!UserName)
             return NextResponse.json({
                 status: 302,

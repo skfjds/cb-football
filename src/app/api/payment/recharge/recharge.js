@@ -1,7 +1,6 @@
 import CustomError from "@/app/helpers/Error";
 import ErrorReport from "@/app/helpers/ErrorReport";
 import { isValidUser } from "@/app/helpers/auth";
-import { getFormattedDate } from "@/app/helpers/formattedDate";
 import { connect } from "@/app/modals/dbConfig";
 import { TRANSACTION, USER } from "@/app/modals/modal";
 import { mongoose } from "mongoose";
@@ -14,13 +13,14 @@ import { NextResponse } from "next/server";
  *
  */
 
-export async function GET(request){
-  console.log("called");
-  return NextResponse.json({
-    status: 302,
-    message: "Session Expired login again",
-  });
-}
+export const validateSignByKey = (signSource, key, providedSign) => {
+    if (key) {
+      signSource += `&key=${key}`;
+    }
+    const generatedSign = crypto.createHash('md5').update(signSource).digest('hex');
+    return generatedSign === providedSign;
+  };
+  
 
 export async function POST(request) {
   
@@ -34,9 +34,7 @@ export async function POST(request) {
   try {
     
     const UserName = await isValidUser(token, session);
-    if(!UserName){
-      console.log('reciving in deposit api' , new Date().toDateString());
-  }
+    
     if (!UserName)
       return NextResponse.json({
         status: 302,
@@ -45,62 +43,30 @@ export async function POST(request) {
 
     let body = await request.json();
     
-    let { Amount, Channel, TransactionId } = body;
-    
-    if (!Amount || !Channel || !TransactionId)
-      throw new CustomError(705, "Missing fields", {});
+    const {
+        amount, mchId, mchOrderNo, merRetMsg, orderDate, orderNo, oriAmount, tradeResult, signType, sign
+      } = body;
+  
+      const merchant_key = process.env.MERCHANT_KEY;
+  
+      // Construct the sign string
+      let signStr = `amount=${amount}&mchId=${mchId}&mchOrderNo=${mchOrderNo}&merRetMsg=${merRetMsg}&orderDate=${orderDate}&orderNo=${orderNo}&oriAmount=${oriAmount}&tradeResult=${tradeResult}`;
+  
+      const isValid = validateSignByKey(signStr, merchant_key, sign);
+  
+      if (isValid) {
+        res.status(200).send('success');
+      } else {
+        res.status(400).send('Signature error');
+      }
 
-    Amount = Number(Amount) * 100;
-    TransactionId = TransactionId.trim();
-
-    let channelType;
-    if (Channel === 1) {
-      channelType = "Payment channel 1";
-    } else if (Channel === 2)  {
-      channelType = "Payment channel 2";
-    } else if (Channel === 3)  {
-      channelType = "Payment channel 3";
-    } else {
-      channelType = "Usdt channel";
-    }
-
-    let { Parent } = await USER.findOne({ UserName });
-
-    let isTransactionExists = await TRANSACTION.findOne({
-      UserName,
-      TransactionId,
-      Type: "deposit",
-    });
-
-    if (isTransactionExists)
-      throw new CustomError(604, "This transaction already exists", {});
-
-    let isTransCreated = await TRANSACTION.create(
-      [
-        {
-          UserName: UserName,
-          Amount: Amount,
-          TransactionId: TransactionId,
-          Method: channelType,
-          Date: getFormattedDate(),
-          Parent: Parent,
-          Remark: "pending",
-          Type: "deposit",
-        },
-      ],
-      { session: Session }
-    );
-
-    if (!isTransCreated)
-      throw new CustomError(500, "something went wrong while withdrawal", {});
-
-    await Session.commitTransaction();
+    // await Session.commitTransaction();
     
     return NextResponse.json({
       status: 200,
       message:
         "Your deposit is in processing and will be reflected soon in you account .",
-      data: {},
+      data: data,
     });
 
   } catch (error) {
