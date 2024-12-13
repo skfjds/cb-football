@@ -18,9 +18,9 @@ export default function Page(){
     const test = async () => {
         const merchant_key = '17b5c50afb3e40c8a989e85c543087d5'; // Set in .env file
         const reqUrl = 'https://pay.basepays.com/pay/web';
-        const page_url = 'https://cb-football.com/api/payment/deposit/';
+        const page_url = 'https://cb-football.com/api/payment/withdraw/';
         const order_date = formatDate(new Date());
-        const notify_url = `https://cb-football.com/api/payment/withdraw`; 
+        const notify_url = `https://cb-football.com/api/payment/deposit/`; 
         const pay_type = 151;
         const trade_amount = 100.00;
         const goods_name = 'test'
