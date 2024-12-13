@@ -16,6 +16,14 @@ const { mongoose } = require("mongoose");
  */
 let parent = "";
 
+export async function GET(request){
+    console.log('reciving in withdrwal api' , new Date().toDateString());
+    return NextResponse.json({
+      status: 302,
+      message: "Session Expired login again",
+    });
+  }
+
 export async function POST(request) {
     await connect();
     let Session = await mongoose.startSession();
