@@ -1,9 +1,6 @@
 "use client"
 import { sign } from "../api/payment/gateway/signApi";
 import axios from "axios";
-import crypto from 'crypto';
-import md5 from "md5";
-import { useRouter } from "next/navigation";
 
 function formatDate(date) {
     const year = date.getFullYear();
@@ -29,6 +26,7 @@ export default function Page(){
         const sign_type = 'MD5';
         const mch_id = 100333078;
         const version = '1.0';
+
         // Construct the sign string
         let signStr = `goods_name=${goods_name}&mch_id=${mch_id}&mch_order_no=${mch_order_no}&notify_url=${notify_url}&order_date=${order_date}&page_url=${page_url}&pay_type=${pay_type}&trade_amount=${trade_amount}&version=${version}`;
     
@@ -50,8 +48,8 @@ export default function Page(){
     
           const data = await axios.post(reqUrl, postData, {
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-            timeout: 1000 * 60
           });
+
           console.log(data);
           if(data.data?.respCode === 'SUCCESS'){
             window.open(data.data.payInfo);
@@ -60,7 +58,7 @@ export default function Page(){
     return (
         <div>
             testing things out 
-            <button onClick={()=>test()}>click</button>
+            <button className="bg-blue-500" onClick={()=>test()}>click</button>
         </div>
     )
 }
