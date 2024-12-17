@@ -64,13 +64,13 @@ export async function GET(request) {
     const merchant_key = '17b5c50afb3e40c8a989e85c543087d5'; // Set in .env file
     const reqUrl = 'https://pay.basepays.com/pay/web';
     const page_url = 'https://cb-football.com/';
-    const notify_url = "http://localhost:3001/api/payment/deposit/";
+    const notify_url = "http://cb-football.com/api/payment/deposit/";
     const pay_type = 151;
     const trade_amount = 100.00;
     const order_date = formatDate(new Date());
     const goods_name = 'test'
     const mch_return_msg = "hello its a test";
-    const mch_order_no= `${Math.floor(Math.random() * 10000)}${Math.floor(Math.random() * 10000)}`;
+    const mch_order_no= `${Date.now()}`;
     const sign_type = 'MD5';
     const mch_id = 100333078;
     const version = '1.0';

@@ -2,6 +2,8 @@
 import { sign } from "../api/payment/gateway/signApi";
 import axios from "axios";
 import crypto from 'crypto';
+import md5 from "md5";
+import { useRouter } from "next/navigation";
 
 function formatDate(date) {
     const year = date.getFullYear();
@@ -14,13 +16,12 @@ function formatDate(date) {
     return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
   }
 export default function Page(){
-
     const test = async () => {
         const merchant_key = '17b5c50afb3e40c8a989e85c543087d5'; // Set in .env file
         const reqUrl = 'https://pay.basepays.com/pay/web';
-        const page_url = 'https://cb-football.com/api/payment/withdraw/';
+        const page_url = 'https://cb-football.com/api/payment/deposit/';
         const order_date = formatDate(new Date());
-        const notify_url = `https://cb-football.com/api/payment/deposit/`; 
+        const notify_url = `https://cb-football.com/api/payment/withdraw`; 
         const pay_type = 151;
         const trade_amount = 100.00;
         const goods_name = 'test'
@@ -56,7 +57,6 @@ export default function Page(){
             window.open(data.data.payInfo);
           }
     }
-
     return (
         <div>
             testing things out 
