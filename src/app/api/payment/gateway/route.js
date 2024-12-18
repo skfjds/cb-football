@@ -38,7 +38,7 @@ export async function POST(request) {
 
     const merchantId = process.env.NEXT_PUBLIC_MERCHANT_ID;
 
-    console.log(JSON.stringify(request));
+    console.log(request);
     const body = await request.json();
     console.log(JSON.stringify(body));
     const {
