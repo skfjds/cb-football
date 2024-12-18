@@ -79,7 +79,7 @@ export async function POST(request) {
       });
   
     } catch (error) {
-  
+      console.log(error);
       if (error?.code === 500 || error?.status === 500 || !error?.status) {
         ErrorReport(error);
       }

@@ -68,8 +68,7 @@ export default function Page(){
 
       const orderNo = Date.now();
       const reqBody = {orderNo,amount}
-      test(amount, orderNo)
-      return;
+  
       const res = await fetch("/api/payment/initiateGateway", {
         method: 'POST',
         headers: {
@@ -83,7 +82,7 @@ export default function Page(){
         alert('something went wrong');
       }
       setLoading(true);
-      test(amount, orderNo)
+      await test(amount, orderNo)
       setLoading(false);
     } catch (error) {
       alert(error);

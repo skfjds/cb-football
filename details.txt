@@ -1,0 +1,83 @@
+SPECIAL USER STATUS
+
+-- We need a new table for this as a single user can have multiple achivements.
+	- Table name - Achivements
+		
+		columns (user_id, achivementClass, achivementName)
+		
+		- achivementClass -> Which class does this achivement belongs to eg (creator, participant etc.)
+		- achivementName -> ['event organizer', 'event master'... ] Name of the achivement accomplished / will be accomplished if in progress.
+		- status -> Enum (progress | achived | maxed)
+		- progressCount -> Number of times this was completed.
+		
+		We will store the key value pair of achivement class and there names. 
+
+		[
+			creator : {
+				5 : 'event organizer'
+				10 : 'event master'
+			}
+			...
+		]
+
+		And while updating the achivements table for a particular user we can refrence this table if there is nothing in progressCount + 1
+		then the user has already maxed out this achivement.
+		we are keeping status as progress till the user unlocks any one of the achivement names and then we will change it to achived.
+		Same if user has maxed out their achivement we can change it to maxed so we will not query this again and agin.
+
+
+COUPONS 
+
+-- We need a new table.
+	- Table name - Coupons
+
+		Columns ( code, discount, discountType, uses, limit, expiresAt)
+		
+		- code -> coupon code (can be used to get a discount on purusit creation or for other websites)
+		- discount -> inteager value 
+		- discountType -> Enum (fixed | percentage)
+		- uses -> number of times this coupon can be used.
+		- limit -> maximum amount that can be discounted from this coupon.
+		- expiresAt -> When the coupon will expire.
+
+
+PURSUIT CUSTOM REWARDS
+
+-- We need a new table.
+	- Table name - PurusitRewards
+		
+		Columns ( pursuit_id, reward_title, reward_description, reward_image_url, reward_metadata, rank )
+		
+		- reward_title -> title of the reward like "Iphone14" etc. (incase of money it will be directly mentioned here 1000 etc.)
+		- reward_description -> Short description of the reward like specifications etc.
+		- reward_metadata -> Detailed specifications and terms&condition.
+		- rank -> for which rank this reward is applicable.
+
+
+-- 2nd suggestion
+
+	- Create a new column reward_details in pursuit_list as JSON.
+	
+	it will be a object containg details similar to above.
+	{
+		rank (1) : {
+			reward_title : string;
+			reward_description: string;
+			reward_image_url : string;
+			reward_description: string;
+			reward_metadata: JSON.
+		},
+		rank (2) : {
+			reward_title : string;
+			reward_description: string;
+			reward_image_url : string;
+			reward_description: string;
+			reward_metadata: JSON.
+		},
+		...
+	}
+
+
+
+
+
