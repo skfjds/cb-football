@@ -39,9 +39,14 @@ export async function POST(request, response) {
     const merchantId = process.env.NEXT_PUBLIC_MERCHANT_ID;
 
     const rawBody = await request.text();
-    console.log("Raw Body:", rawBody);
-    
-    const body = await request.json();
+
+    // Parse the URL-encoded body
+    const params = new URLSearchParams(rawBody);
+
+    // Convert the parsed data into an object
+    const body = Object.fromEntries(params);
+   
+    console.log("Parsed Body:", body);
 
     const {
       tradeResult="", oriAmount=0, amount=1, mchId="", mchOrderNo=1, orderDate='' } = body
@@ -55,18 +60,20 @@ export async function POST(request, response) {
       return NextResponse.json("failure")
     }  
 
+    const amm_updated = oriAmount * 100;
+
     const isTransactionUpdated = await TRANSACTION.findOneAndUpdate({
       TransactionId: `${mchOrderNo}`
       },{
         $set: {
           Status : 1,
-          Amount: oriAmount,
+          Amount: amm_updated,
           Remark: "successfull",
           Type: "deposit",
         }
       }, {session: Session});
 
-    const amm_updated = oriAmount * 100;
+
 
     let isFirstDeposit = await USER.findOne({ UserName: isTransactionUpdated?.UserName });
 
