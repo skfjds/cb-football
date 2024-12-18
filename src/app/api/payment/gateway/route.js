@@ -27,7 +27,7 @@ export const validateSignByKey = (signSource, key, providedSign) => {
 /**
  * {"tradeResult":"1","oriAmount":"100.00","amount":"100.00","mchId":"100333078","orderNo":"1000065484115","mchOrderNo":"85749324","sign":"a112aaf80bb0cc13b1828fc43765850f","signType":"MD5","orderDate":"2024-12-18 00:31:38"}
  */
-export async function POST(request) {
+export async function POST(request, response) {
   
   await connect();
   
@@ -38,9 +38,11 @@ export async function POST(request) {
 
     const merchantId = process.env.NEXT_PUBLIC_MERCHANT_ID;
 
-    console.log(request);
+    const rawBody = await request.text();
+    console.log("Raw Body:", rawBody);
+    
     const body = await request.json();
-    console.log(JSON.stringify(body));
+
     const {
       tradeResult="", oriAmount=0, amount=1, mchId="", mchOrderNo=1, orderDate='' } = body
 
