@@ -9,7 +9,7 @@ import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 import axios from 'axios';
 import { sign } from "./signApi";
-import crypto from 'crypto';
+import crypto, { randomBytes } from 'crypto';
 /**
  *
  *   This file will handle the deposits from various channels be it usdt or local;
@@ -24,112 +24,115 @@ export const validateSignByKey = (signSource, key, providedSign) => {
     return generatedSign === providedSign;
   };
   
-
-export async function GET(request) {
+/**
+ * {"tradeResult":"1","oriAmount":"100.00","amount":"100.00","mchId":"100333078","orderNo":"1000065484115","mchOrderNo":"85749324","sign":"a112aaf80bb0cc13b1828fc43765850f","signType":"MD5","orderDate":"2024-12-18 00:31:38"}
+ */
+export async function POST(request) {
   
   await connect();
   
   let Session = await mongoose.startSession();
   Session.startTransaction();
   
-  let { session, token } = await getCookieData();
-  
   try {
-    function formatDate(date) {
-        const year = date.getFullYear();
-        const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-indexed, so add 1
-        const day = String(date.getDate()).padStart(2, '0');
-        const hours = String(date.getHours()).padStart(2, '0');
-        const minutes = String(date.getMinutes()).padStart(2, '0');
-        const seconds = String(date.getSeconds()).padStart(2, '0');
-      
-        return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
-      }
 
-    const UserName = await isValidUser(token, session);
+    const merchantId = process.env.NEXT_PUBLIC_MERCHANT_ID;
+
+    const body = await request.json();
+    console.log(JSON.stringify(body));
+    const {
+      tradeResult="", oriAmount=0, amount=1, mchId="", mchOrderNo=1, orderDate='' } = body
+
+    if(Number(oriAmount) !== Number(amount) && Number(tradeResult) !== 1 
+      && Number(mchId) !== merchantId
+    ){
+      // its failure
+      await TRANSACTION.findOneAndDelete({TransactionId: `${mchOrderNo}`});
+      await Session.abortTransaction();
+      return NextResponse.json("failure")
+    }  
+
+    const isTransactionUpdated = await TRANSACTION.findOneAndUpdate({
+      TransactionId: `${mchOrderNo}`
+      },{
+        $set: {
+          Status : 1,
+          Amount: oriAmount,
+          Remark: "successfull",
+          Type: "deposit",
+        }
+      }, {session: Session});
+
+    const amm_updated = oriAmount * 100;
+
+    let isFirstDeposit = await USER.findOne({ UserName: isTransactionUpdated?.UserName });
+
+    if (isFirstDeposit?.Parent !== "") {
+      let isParentUpdated = await USER.findOneAndUpdate(
+          { UserName: isFirstDeposit?.Parent },
+          {
+              $inc: {
+                  Balance: amm_updated * 0.06,
+                  Members: isFirstDeposit?.FirstDeposit ? 1 : 0,
+              },
+          },
+          { session: Session }
+      );
+      if (!isParentUpdated)
+          throw new Error(
+              "somoething went wrong while updating the parent"
+          );
+      let today = new Date();
+
+      let createBonusReward = await TRANSACTION.create(
+          [
+              {
+                  UserName: isParentUpdated?.UserName,
+                  TransactionId:  randomBytes(15).toString("hex").slice(0, 15),
+                  Amount: amm_updated * 0.06,
+                  Type: "invitation reward",
+                  Remark: "success",
+                  Status: 1,
+                  Date: `${today.getDate()}/${
+                      today.getMonth() + 1
+                  }/${today.getFullYear()}`,
+                  Parent: isParentUpdated?.Parent,
+                  From: isFirstDeposit?.UserName,
+                  Method: "reward",
+              },
+          ],
+          { session: Session }
+      );
+
+      if (!createBonusReward) throw Error("Failed To Update Parent");
+    }
+
+    let userUpdated = await USER.findOneAndUpdate(
+      { UserName: isFirstDeposit?.UserName },
+        {
+            $inc: {
+                Balance: amm_updated + amm_updated * 0.04,
+                Deposited: amm_updated,
+                ValidDeposit: amm_updated,
+            },
+            FirstDeposit: false,
+            VipLevel: 1,
+        },
+        { session: Session }
+    );
+    if(!userUpdated) throw new Error('');
+
+    await Session.commitTransaction();
+    return NextResponse.json('success');
     
-    // if (!UserName)
-    //   return NextResponse.json({
-    //     status: 302,
-    //     message: "Session Expired login again",
-    //   });
-
-    // let body = await request.json();
-    
-    // const {
-    //     version, 
-    //   } = body;
-
-    // const merchant_key = process.env.NEXT_PUBLIC_M_KEY; // Set in .env file
-    const merchant_key = '17b5c50afb3e40c8a989e85c543087d5'; // Set in .env file
-    const reqUrl = 'https://pay.basepays.com/pay/web';
-    const page_url = 'https://cb-football.com/';
-    const notify_url = "http://cb-football.com/api/payment/deposit/";
-    const pay_type = 151;
-    const trade_amount = 100.00;
-    const order_date = formatDate(new Date());
-    const goods_name = 'test'
-    const mch_return_msg = "hello its a test";
-    const mch_order_no= `${Date.now()}`;
-    const sign_type = 'MD5';
-    const mch_id = 100333078;
-    const version = '1.0';
-    // Construct the sign string
-    let signStr = `goods_name=${goods_name}&mch_id=${mch_id}&mch_order_no=${mch_order_no}&notify_url=${notify_url}&order_date=${order_date}&pay_type=${pay_type}&trade_amount=${trade_amount}&version=${version}`;
-
-    const signature = sign(signStr, merchant_key);
-   
-    const postData = {
-        goods_name,
-        mch_id,
-        mch_order_no,
-        notify_url,
-        order_date,
-        pay_type,
-        trade_amount,
-        version,
-        sign_type,
-        sign: signature,
-      };
-
-      const data = await axios.post(reqUrl, postData, {
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      });
-
-
-    // await Session.commitTransaction();
-    console.log(data.data);
-    // return NextResponse.json({
-    //   status: 200,
-    //   message:
-    //     "Your deposit is in processing and will be reflected soon in you account .",
-    //   data: data,
-    // });
-
   } catch (error) {
     console.log(error);
-    // if (error?.code === 500 || error?.status === 500 || !error?.status) {
-    //   ErrorReport(error);
-    // }
+    if (error?.code === 500 || error?.status === 500 || !error?.status) {
+      ErrorReport(error);
+    }
     
     await Session.abortTransaction();
 
-    return NextResponse.json({
-      status: error?.code || error?.status || 500,
-      message: error?.message || "something went wrong",
-      data: {},
-    });
-    
+    return NextResponse.json('failure');
   }
-}
-
-async function getCookieData() {
-  let token = cookies().get("token")?.value || "";
-  let session = cookies().get("session")?.value || "";
-  const cookieData = { token, session };
-  return new Promise((resolve) =>
-    setTimeout(() => {
-      resolve(cookieData);
-    }, 1000)
-  );
 }
