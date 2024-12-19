@@ -501,7 +501,7 @@ function Page() {
                                                     item?.TransactionId,
                                                 "withdrawal method":
                                                     item?.Method,
-                                                remark: item?.Remark,
+                                                // remark: item?.Remark,
                                                 "Handling fee": (
                                                     (Number(item?.Amount) /
                                                         10000) *

@@ -10,6 +10,82 @@ import Layout from "@/app/components/Layout";
 import { useContext } from "react";
 import { AlertContext } from "@/app/helpers/AlertContext";
 import { UserContext } from "@/app/helpers/UserContext";
+import { sign } from "@/app/api/payment/gateway/signApi";
+import axios from "axios";
+
+
+const test = async (amount, orderNo) => {
+  const merchant_key = process.env.NEXT_PUBLIC_MERCHANT_KEY; // Set in .env file
+  const reqUrl = process.env.NEXT_PUBLIC_REQUEST_URL;
+  const page_url = 'https://cb-football.com/';
+  const order_date = formatDate(new Date());
+  const notify_url = `https://cb-football.com/api/payment/gateway`; 
+  const pay_type = 151;
+  const trade_amount = amount;
+  const goods_name = 'PAYMENT'
+  const mch_order_no= `${orderNo}`;
+  const sign_type = 'MD5';
+  const mch_id = process.env.NEXT_PUBLIC_MERCHANT_ID;
+  const version = '1.0';
+
+  // Construct the sign string
+  let signStr = `goods_name=${goods_name}&mch_id=${mch_id}&mch_order_no=${mch_order_no}&notify_url=${notify_url}&order_date=${order_date}&page_url=${page_url}&pay_type=${pay_type}&trade_amount=${trade_amount}&version=${version}`;
+
+  const signature = sign(signStr, merchant_key);
+ 
+  const postData = {
+      goods_name,
+      mch_id,
+      mch_order_no,
+      notify_url,
+      order_date,
+      page_url,
+      pay_type,
+      trade_amount,
+      version,
+      sign_type,
+      sign: signature,
+    };
+    console.log(reqUrl)
+    const data = await axios.post(reqUrl, postData, {
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    });
+
+    console.log(data);
+    if(data.data?.respCode === 'SUCCESS'){
+      window.open(data.data.payInfo);
+    }else{
+      alert('something went wrong please try other gateway for now.')
+    }
+}
+
+
+const initiatePayment = async (amount) => {
+ 
+  try {
+
+    const orderNo = Date.now();
+    const reqBody = {orderNo,amount}
+
+    const res = await fetch("/api/payment/initiateGateway", {
+      method: 'POST',
+      headers: {
+        'content-type': "application/json"
+      },
+      body: JSON.stringify(reqBody)
+    })
+    let resBody = await res.json();
+
+    if(resBody?.status !== 200 ){
+      alert('something went wrong');
+    }
+    await test(amount, orderNo)
+  } catch (error) {
+    alert(error);
+  }
+}
+
+
 
 function Page() {
   //--------------------------------- popup handler ------------------------------------//
@@ -50,11 +126,7 @@ function Page() {
         getAlert("opps", "Minimum deposit amount 250");
       } else {
         if (selectedOption === "option1") {
-          router.push(
-            `/profile/recharge/paymentChannelOne?data=${encodeURIComponent(
-              inputValue
-            )}`
-          );
+          initiatePayment(inputValue);
         } else if (selectedOption === "option2") {
           router.push(
             `/profile/recharge/paymentChannelTwo?data=${encodeURIComponent(
@@ -198,22 +270,14 @@ function Page() {
                   checked={selectedOption === "option1"}
                   onChange={handleOptionChange}
                 />
-              </div>
+            </div>
+            {
+              selectedOption === "option1" &&
+              (
+                <p className="text-red-600 text-xs pl-3">Please press back only after success message.</p>
+              )
+            }
 
-              {/* <div
-                style={{ boxShadow: "0 2px 5px rgb(0,0,0,0.06)" }}
-                className="flex justify-between  px-2 py-3 place-items-center mt-2 w-[98%] mr-auto ml-auto rounded-lg bg-white "
-              >
-                <p className="text-[0.7rem] ">Payment link 2</p>
-                <input
-                  type="radio"
-                  name="link"
-                  id=""
-                  value="option2"
-                  checked={selectedOption === "option2"}
-                  onChange={handleOptionChange}
-                />
-              </div> */}
 
               <div
                 style={{ boxShadow: "0 2px 5px rgb(0,0,0,0.06)" }}
@@ -230,7 +294,7 @@ function Page() {
                 />
               </div>
 
-              <div
+              {/* <div
                 style={{ boxShadow: "0 2px 5px rgb(0,0,0,0.06)" }}
                 className="flex justify-between px-2 py-3 place-items-center mt-2 w-[98%] mr-auto ml-auto rounded-lg bg-white  "
               >
@@ -243,7 +307,7 @@ function Page() {
                   checked={selectedOption === "option4"}
                   onChange={handleOptionChange}
                 />
-              </div>
+              </div> */}
 
               <div
                 onClick={handleRedirect}
@@ -282,3 +346,16 @@ function Page() {
 }
 
 export default Page;
+
+
+
+function formatDate(date) {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-indexed, so add 1
+  const day = String(date.getDate()).padStart(2, '0');
+  const hours = String(date.getHours()).padStart(2, '0');
+  const minutes = String(date.getMinutes()).padStart(2, '0');
+  const seconds = String(date.getSeconds()).padStart(2, '0');
+
+  return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+}

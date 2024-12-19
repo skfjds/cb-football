@@ -133,7 +133,7 @@ export async function POST(request, response) {
     if(!userUpdated) throw new Error('');
 
     await Session.commitTransaction();
-    return NextResponse.json('success');
+    return new NextResponse('success', {status: 200});
     
   } catch (error) {
     console.log(error);
@@ -143,6 +143,7 @@ export async function POST(request, response) {
     
     await Session.abortTransaction();
 
-    return NextResponse.json('failure');
+    return new NextResponse('failure', {status: 400 });
+
   }
 }
