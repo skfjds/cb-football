@@ -129,7 +129,7 @@ function Page() {
           initiatePayment(inputValue);
         } else if (selectedOption === "option2") {
           router.push(
-            `/profile/recharge/paymentChannelTwo?data=${encodeURIComponent(
+            `/profile/recharge/paymentChannelOne?data=${encodeURIComponent(
               inputValue
             )}`
           );
@@ -279,6 +279,20 @@ function Page() {
             }
 
 
+              <div
+                style={{ boxShadow: "0 2px 5px rgb(0,0,0,0.06)" }}
+                className="flex justify-between  px-2 py-3 place-items-center mt-2 w-[98%] mr-auto ml-auto rounded-lg bg-white "
+              >
+                <p className="text-[0.7rem] ">Payment link 2</p>
+                <input
+                  type="radio"
+                  name="link"
+                  id=""
+                  value="option2"
+                  checked={selectedOption === "option2"}
+                  onChange={handleOptionChange}
+                />
+              </div>
               <div
                 style={{ boxShadow: "0 2px 5px rgb(0,0,0,0.06)" }}
                 className="flex justify-between  px-2 py-3 place-items-center mt-2 w-[98%] mr-auto ml-auto rounded-lg bg-white "
