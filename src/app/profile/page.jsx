@@ -472,7 +472,7 @@ function Page() {
                             className="max-h-[80%] overflow-y-scroll pt-6 pb-40 px-4"
                         >
                             {transactionData?.map((item, idx) => {
-                                if (swipe === 1 && item?.Type === "deposit") {
+                                if (swipe === 1 && item?.Type === "deposit" || item?.Type === 'gateway') {
                                     //  deposit type
                                     return (
                                         <RecordAccordians
