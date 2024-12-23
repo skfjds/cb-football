@@ -108,7 +108,7 @@ async function settleDeposit(data) {
                     transactionDetailsArray.push( {
                         UserName: isParentUpdated?.UserName,
                         TransactionId: await genTransactionID(),
-                        Amount: 200 * 100,
+                        Amount: 100 * 100,
                         Type: "5 invitation reward",
                         Remark: "success",
                         Status: 1,
