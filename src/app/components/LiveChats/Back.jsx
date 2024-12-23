@@ -3,7 +3,6 @@ import { LiaAngleLeftSolid } from "react-icons/lia";
 
 const Back = ({ page }) => {
   const router = useRouter();
-  return <></>
   return (
     <div className="grid grid-cols-3 items-center text-center py-4 h-[8%] ">
       <span

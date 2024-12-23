@@ -87,24 +87,42 @@ async function settleDeposit(data) {
                         "somoething went wrong while updating the parent"
                     );
                 let today = new Date();
+                let transactionDetailsArray =  [
+                    {
+                        UserName: isParentUpdated?.UserName,
+                        TransactionId: await genTransactionID(),
+                        Amount: amm_updated * 0.06,
+                        Type: "invitation reward",
+                        Remark: "success",
+                        Status: 1,
+                        Date: `${today.getDate()}/${
+                            today.getMonth() + 1
+                        }/${today.getFullYear()}`,
+                        Parent: isParentUpdated?.Parent,
+                        From: data?.UserName,
+                        Method: "reward",
+                    },
+                ];
+
+                if(isFirstDeposit.FirstDeposit && Number(isParentUpdated.Members)%5 === 0){
+                    transactionDetailsArray.push( {
+                        UserName: isParentUpdated?.UserName,
+                        TransactionId: await genTransactionID(),
+                        Amount: 200 * 100,
+                        Type: "5 invitation reward",
+                        Remark: "success",
+                        Status: 1,
+                        Date: `${today.getDate()}/${
+                            today.getMonth() + 1
+                        }/${today.getFullYear()}`,
+                        Parent: isParentUpdated?.Parent,
+                        From: data?.UserName,
+                        Method: "reward",
+                    })
+                }
 
                 let createBonusReward = await TRANSACTION.create(
-                    [
-                        {
-                            UserName: isParentUpdated?.UserName,
-                            TransactionId: await genTransactionID(),
-                            Amount: amm_updated * 0.06,
-                            Type: "invitation reward",
-                            Remark: "success",
-                            Status: 1,
-                            Date: `${today.getDate()}/${
-                                today.getMonth() + 1
-                            }/${today.getFullYear()}`,
-                            Parent: isParentUpdated?.Parent,
-                            From: data?.UserName,
-                            Method: "reward",
-                        },
-                    ],
+                   transactionDetailsArray,
                     { session: Session }
                 );
 
