@@ -178,7 +178,7 @@ async function updateUser(UserName, Amount, Session, Bank, WithdrawCode) {
             ErrorReport(error);
         }
         parent = "";
-        throw new CustomError(705, "Low balance or bank not added");
+        throw new CustomError(705, "Low balance or wrong withdrawal code");
     }
 }
 

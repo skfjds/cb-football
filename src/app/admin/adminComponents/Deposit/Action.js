@@ -104,22 +104,22 @@ async function settleDeposit(data) {
                     },
                 ];
 
-                if(isFirstDeposit.FirstDeposit && Number(isParentUpdated.Members)%5 === 0){
-                    transactionDetailsArray.push( {
-                        UserName: isParentUpdated?.UserName,
-                        TransactionId: await genTransactionID(),
-                        Amount: 100 * 100,
-                        Type: "5 invitation reward",
-                        Remark: "success",
-                        Status: 1,
-                        Date: `${today.getDate()}/${
-                            today.getMonth() + 1
-                        }/${today.getFullYear()}`,
-                        Parent: isParentUpdated?.Parent,
-                        From: data?.UserName,
-                        Method: "reward",
-                    })
-                }
+                // if(isFirstDeposit.FirstDeposit && Number(isParentUpdated.Members)%5 === 0){
+                //     transactionDetailsArray.push( {
+                //         UserName: isParentUpdated?.UserName,
+                //         TransactionId: await genTransactionID(),
+                //         Amount: 100 * 100,
+                //         Type: "5 invitation reward",
+                //         Remark: "success",
+                //         Status: 1,
+                //         Date: `${today.getDate()}/${
+                //             today.getMonth() + 1
+                //         }/${today.getFullYear()}`,
+                //         Parent: isParentUpdated?.Parent,
+                //         From: data?.UserName,
+                //         Method: "reward",
+                //     })
+                // }
 
                 let createBonusReward = await TRANSACTION.create(
                    transactionDetailsArray,
