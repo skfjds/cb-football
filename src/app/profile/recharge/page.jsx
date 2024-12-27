@@ -126,11 +126,12 @@ function Page() {
         getAlert("opps", "Minimum deposit amount 250");
       } else {
         if (selectedOption === "option1") {
-          router.push(
-            `/profile/recharge/paymentChannelOne?data=${encodeURIComponent(
-              inputValue
-            )}`
-          );
+          // router.push(
+          //   `/profile/recharge/paymentChannelOne?data=${encodeURIComponent(
+          //     inputValue
+          //   )}`
+          // );
+          initiatePayment(inputValue);
         } else if (selectedOption === "option2") {
           router.push(
             `/profile/recharge/paymentChannelTwo?data=${encodeURIComponent(
