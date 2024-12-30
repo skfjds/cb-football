@@ -141,6 +141,7 @@ export default function Home() {
     useEffect(()=>{
        const timeOut =  setTimeout(()=>{
             setLandingPopup(false);
+            updateLoaded(true);
         }, 1000 * 5);
         return ()=>{
             if(timeOut) clearTimeout(timeOut);

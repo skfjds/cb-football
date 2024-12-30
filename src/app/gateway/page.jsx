@@ -50,7 +50,7 @@ export default function Page(){
           setLoading(false);
       }
   };
-
+ return <></>
   return (
       <div className="max-w-lg mx-auto mt-10 p-4 bg-white rounded-lg shadow-lg">
           <h1 className="text-2xl font-semibold text-center mb-4">Payment Gateway</h1>

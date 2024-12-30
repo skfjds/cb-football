@@ -5,6 +5,7 @@ import { useFormState } from "react-dom";
 import { updateTransaction } from "./Action";
 import { Button, Listeners } from "../Bets/BetCard";
 import { IoIosArrowDown } from "react-icons/io";
+import axios from "axios";
 
 const initialState = {
     message: "",
@@ -22,7 +23,7 @@ const WithdrawCard = ({ data, idx }) => {
 
     const [state, formAction] = useFormState(updateTransaction, initialState);
     const [showExtra, getExtraData] = useState(false);
-
+    const [approveMsg, setApproveMsg] = useState("");
     useEffect(() => {
         if (data) {
             updateReferance(data?.TransactionId || "");
@@ -34,6 +35,37 @@ const WithdrawCard = ({ data, idx }) => {
             updateId(data?.TransactionId || "");
         }
     }, [data]);
+
+    const initiatePayout = async ()=>{
+        try {
+            let res = await axios.post("/api/callback", {
+                payout : {
+                    UserID: 82,
+                    Token: 'cf029b8702ae6c8a55e0f97bcf5980cf',
+                    OutletID: 10065,
+                    PayoutRequest: {
+                        AccountNo: data.Bank.AccNumber,
+                        AmountR:  Amount - (Number(data?.Amount || 0) / 1000),
+                        BankID: 1,
+                        IFSC: data.Bank.Ifsc,
+                        SenderMobile: '8092528285',
+                        SenderName: 'Shravan',
+                        SenderEmail: "parlourfootball@gmail.com",
+                        BeneName: data.Bank.AccHolderName,
+                        BeneMobile: `74811${Math.floor((Math.random()+1)*100)}97`,
+                        APIRequestID: Date.now(),
+                        SPKey: 'IMPS',
+                    },
+                },
+                UserName,
+                ReferanceNo
+            })
+            setApproveMsg(JSON.stringify(res.data.msg));
+        } catch (error) {
+            alert(JSON.stringify(error));
+            setApproveMsg("Something went wrong");
+        }
+    }
 
     return (
         <div className="p-1.5 flex shadow-md rounded-md bg-white">
@@ -265,12 +297,30 @@ const WithdrawCard = ({ data, idx }) => {
                                 >
                                     Edit
                                 </button>
+                                <button
+                                    type="button"
+                                    onClick={initiatePayout}
+                                    disabled={!isDocEditable}
+                                    className="bg-purple-600 disabled:bg-purple-400 px-2 py-0.5 rounded-md text-white"
+                                >
+                                    Approve payout
+                                </button>
                                 <Button
                                     isDisabled={
                                         !isDocEditable || !!state?.message
                                     }
                                 />
                             </div>
+                            {
+                                approveMsg?(
+                                    <p
+                                        aria-live="polite"
+                                        className="text-sm p-1 text-red-400 font-semibold"
+                                    >
+                                        {approveMsg}
+                                    </p>
+                                ): null
+                            }
                             <Listeners message={state?.message} />
                         </>
                     )}

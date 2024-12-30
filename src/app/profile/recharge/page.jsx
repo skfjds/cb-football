@@ -59,6 +59,27 @@ const test = async (amount, orderNo) => {
     }
 }
 
+const okPay = async (amount, orderNo) => {
+  let key = 'eb6080dbc8dc429ab86a1cd1c337975d';
+
+  var urlencoded = new URLSearchParams();
+  urlencoded.append("mchId", "1000");
+  urlencoded.append("currency", "INR");
+  urlencoded.append("out_trade_no", `${Date.now()}`);
+  urlencoded.append("pay_type", "UPI");
+  urlencoded.append("money", "100");
+  urlencoded.append("attach", "userId");
+  urlencoded.append("notify_url", "https://www.sandbox.wpay.one/callback/payin");
+  urlencoded.append("returnUrl", "https://www.google.com");
+  
+  const signature = sign(urlencoded.toString(), key);
+  urlencoded.append("sign", signature);
+  
+  const data = await axios.post('https://sandbox.wpay.one/v1/Collect', urlencoded, {
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+  });
+  console.log(data);
+}
 
 const initiatePayment = async (amount) => {
  
@@ -131,6 +152,7 @@ function Page() {
               inputValue
             )}`
           );
+          // okPay(100, 123);
           // initiatePayment(inputValue);
         } else if (selectedOption === "option2") {
           router.push(
