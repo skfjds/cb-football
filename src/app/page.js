@@ -49,6 +49,7 @@ export default function Home() {
                 updateMatches(res?.data?.matches);
                 setLoading(false); // Set loading to false when data is fetched
             } else {
+                setLoading(false);
                 throw new Error("Somethign went wrong");
             }
         } catch (error) {
@@ -75,6 +76,7 @@ export default function Home() {
         if (!matchLoaded) {
             getLiveMatches();
             updateLoaded(true);
+            setLoading(false);
         }
         randomUser();
     }, [matchLoaded]);

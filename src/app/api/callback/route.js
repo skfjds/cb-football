@@ -8,6 +8,15 @@ import { NextResponse } from "next/server";
 export async function POST(request, res) {
     let body = await request.json();
 
+    try {
+        let exists = await TRANSACTION.findOne({UserName: body.UserName,  Type: "withdrawal", TransactionId: body?.ReferanceNo, Status: 0 });
+        if (!exists) {
+            return NextResponse.json({ status: 0, message: "Transaction already exists" });
+        }
+    } catch (error) {
+        return NextResponse.json({ msg : "Transaction already updated." });
+    }
+
     let response = await axios.post("https://airdexpay.com/API/Payout", body.payout);
     let responseJson = response.data;
     if(responseJson.statuscode === 1 && responseJson.opening > responseJson.closing){

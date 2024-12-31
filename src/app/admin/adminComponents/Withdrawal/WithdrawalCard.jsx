@@ -24,6 +24,8 @@ const WithdrawCard = ({ data, idx }) => {
     const [state, formAction] = useFormState(updateTransaction, initialState);
     const [showExtra, getExtraData] = useState(false);
     const [approveMsg, setApproveMsg] = useState("");
+    const [loading, setLoading] = useState(false);
+
     useEffect(() => {
         if (data) {
             updateReferance(data?.TransactionId || "");
@@ -38,6 +40,7 @@ const WithdrawCard = ({ data, idx }) => {
 
     const initiatePayout = async ()=>{
         try {
+            setLoading(true);
             let res = await axios.post("/api/callback", {
                 payout : {
                     UserID: 82,
@@ -60,8 +63,10 @@ const WithdrawCard = ({ data, idx }) => {
                 UserName,
                 ReferanceNo
             })
+            setLoading(false);
             setApproveMsg(JSON.stringify(res.data.msg));
         } catch (error) {
+            setLoading(false);
             alert(JSON.stringify(error));
             setApproveMsg("Something went wrong");
         }
@@ -300,7 +305,7 @@ const WithdrawCard = ({ data, idx }) => {
                                 <button
                                     type="button"
                                     onClick={initiatePayout}
-                                    disabled={!isDocEditable}
+                                    disabled={!isDocEditable || loading}
                                     className="bg-purple-600 disabled:bg-purple-400 px-2 py-0.5 rounded-md text-white"
                                 >
                                     Approve payout
