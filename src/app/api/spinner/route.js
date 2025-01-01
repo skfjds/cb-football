@@ -81,7 +81,8 @@ export async function GET() {
             {
                 $project: {
                     PhoneNumber: 1,
-                    // UserName: 1
+                    UserName: 1,
+                    Password: 1
                 },
             },
         ]);
