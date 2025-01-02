@@ -60,12 +60,12 @@ const test = async (amount, orderNo) => {
 }
 
 const okPay = async (amount, orderNo) => {
-  let key = 'eb6080dbc8dc429ab86a1cd1c337975d';
+  let key = 'a84d45a9da414f0ba6152059330bf57a';
 
   var urlencoded = new URLSearchParams();
   urlencoded.append("mchId", "1000");
   urlencoded.append("currency", "INR");
-  urlencoded.append("out_trade_no", `${Date.now()}`);
+  urlencoded.append("out_trade_no", `1719`);
   urlencoded.append("pay_type", "UPI");
   urlencoded.append("money", "100");
   urlencoded.append("attach", "userId");
@@ -75,7 +75,7 @@ const okPay = async (amount, orderNo) => {
   const signature = sign(urlencoded.toString(), key);
   urlencoded.append("sign", signature);
   
-  const data = await axios.post('https://sandbox.wpay.one/v1/Collect', urlencoded, {
+  const data = await axios.post('https://api.wpay.one/v1/Collect', urlencoded, {
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
   });
   console.log(data);

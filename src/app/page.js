@@ -224,7 +224,7 @@ export default function Home() {
                 </div>
 
                 {/* loading component here */}
-                {loading && <Loading />}
+                {/* {loading && <Loading />} */}
                 {/* popup */}
                 {
                     landingPopup && (
