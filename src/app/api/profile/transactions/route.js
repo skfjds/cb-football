@@ -115,6 +115,12 @@ export async function GET(request) {
                         total_withdrawal_level3
                 ),
             },
+        }, {
+            
+            headers: {
+                'Cache-Control': 'public, max-age=30'
+            }
+        
         });
     } catch (error) {
         console.log(error);

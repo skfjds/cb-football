@@ -29,12 +29,16 @@ export async function GET(request) {
                 status: 302,
                 message: "Session Expired login again",
             });
-        let previousDates = await getPreviousDates(7);
-        let res = await getBetAndCommissionData(previousDates, UserName);
+        let previousDates = await getPreviousDates(1);
+        let res = await getBetAndCommissionData(previousDates[0], UserName);
         return NextResponse.json({
             status: 200,
             message: "Data fetched",
             data: res,
+        }, {
+            headers: {
+                'Cache-Control': 'public, max-age=120'
+            }
         });
     } catch (error) {
         if (error?.code === 500 || error?.status === 500 || !error?.status) {
@@ -48,12 +52,12 @@ export async function GET(request) {
     }
 }
 
-async function getBetAndCommissionData(commissionDates, UserName) {
+async function getBetAndCommissionData(date, UserName) {
     try {
         await connect();
         let aggregatedData = {};
 
-        for (let date of commissionDates) {
+        // for (let date of commissionDates) {
             const result = await COMMISSION.aggregate([
                 {
                     $match: {
@@ -63,51 +67,56 @@ async function getBetAndCommissionData(commissionDates, UserName) {
                     },
                 },
                 {
-                    $lookup: {
-                        from: "bets",
-                        let: { comStakeId: "$StakeId", comFrom: "$From" },
-                        pipeline: [
-                            {
-                                $match: {
-                                    $expr: {
-                                        $and: [
-                                            { $eq: ["$UserName", "$$comFrom"] },
-                                            {
-                                                $eq: [
-                                                    "$StakeId",
-                                                    "$$comStakeId",
-                                                ],
-                                            },
-                                        ],
-                                    },
-                                },
-                            },
-                            {
-                                $project: {
-                                    BetAmount: 1,
-                                    LeagueName: 1,
-                                    Percentage: 1,
-                                    Remark: 1,
-                                    Score_a: 1,
-                                    Score_b: 1,
-                                    Result_a: 1,
-                                    Result_b: 1,
-                                    StartsAt: 1,
-                                    Team_a: 1,
-                                    Team_a_logo: 1,
-                                    Team_b: 1,
-                                    Team_b_logo: 1,
-                                    createdAt: 1,
-                                    _id: 0,
-                                },
-                            },
-                        ],
-                        as: "details",
-                    },
-                },
+                    $project: {
+                        Commission: 1
+                    }
+                }
+                // {
+                //     $lookup: {
+                //         from: "bets",
+                //         let: { comStakeId: "$StakeId", comFrom: "$From" },
+                //         pipeline: [
+                //             {
+                //                 $match: {
+                //                     $expr: {
+                //                         $and: [
+                //                             { $eq: ["$UserName", "$$comFrom"] },
+                //                             {
+                //                                 $eq: [
+                //                                     "$StakeId",
+                //                                     "$$comStakeId",
+                //                                 ],
+                //                             },
+                //                         ],
+                //                     },
+                //                 },
+                //             },
+                //             // {
+                //             //     $project: {
+                //             //         BetAmount: 1,
+                //             //         LeagueName: 1,
+                //             //         Percentage: 1,
+                //             //         Remark: 1,
+                //             //         Score_a: 1,
+                //             //         Score_b: 1,
+                //             //         Result_a: 1,
+                //             //         Result_b: 1,
+                //             //         StartsAt: 1,
+                //             //         Team_a: 1,
+                //             //         Team_a_logo: 1,
+                //             //         Team_b: 1,
+                //             //         Team_b_logo: 1,
+                //             //         createdAt: 1,
+                //             //         _id: 0,
+                //             //     },
+                //             // },
+                //         ],
+                //         as: "details",
+                //     },
+                // },
             ]);
             aggregatedData[date] = result;
-        }
+        // }
 
         return [aggregatedData];
     } catch (error) {

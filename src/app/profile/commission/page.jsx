@@ -105,6 +105,8 @@ const Page = () => {
         if (res.ok) {
             res = await res.json();
             if (res?.status === 200) {
+            setLoading(false);
+
                 let {
                     level1_transactions,
                     level2_transactions,
@@ -390,7 +392,7 @@ const Page = () => {
                         </div>
 
                         <div
-                            onClick={() => getPopup("commission")}
+                            // onClick={() => getPopup("commission")}
                             style={{
                                 boxShadow: "0px 5px 15px 0px rgba(0,0,0,0.1) ",
                             }}
@@ -403,9 +405,9 @@ const Page = () => {
                                 <h2>{commissionData} today commission</h2>
                             </div>
                             <div className="h-full w-full flex justify-center items-center flex-[1]">
-                                <div className="p-1 rounded-full bg-gray-200 text-sm">
-                                    <LiaAngleRightSolid />
-                                </div>
+                                {/* <div className="p-1 rounded-full bg-gray-200 text-sm"> */}
+                                    {/* <LiaAngleRightSolid /> */}
+                                {/* </div> */}
                             </div>
                         </div>
 

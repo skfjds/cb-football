@@ -8,8 +8,9 @@ import { connect } from "@/app/modals/dbConfig";
 import { revalidatePath } from "next/cache";
 import ErrorReport from "@/app/helpers/ErrorReport";
 import { IoFastFood } from "react-icons/io5";
+import { promises as fs } from "fs";
 
-const CHUNK_SIZE = 100;
+const CHUNK_SIZE = 300;
 
 // function is responsible to settle the unsettled bets placed by the user's
 let update_user = [];
@@ -44,14 +45,6 @@ export async function settle(prevState, formData) {
             message: "select either cancel or success",
         };
     } catch (error) {
-        // if (
-        //   error?.code === 500 ||
-        //   error?.status === 500 ||
-        //   !error?.code ||
-        //   !error?.status
-        // ) {
-        //   ErrorReport(error);
-        // }
         return {
             message: error?.message || error,
         };
@@ -73,6 +66,11 @@ async function betParser({
     const session = await mongoose.startSession();
     session.startTransaction();
     try {
+
+        let totalUpdatedUsers = { matchedCount: 0, modifiedCount: 0 };
+        let totalUpdatedBets = { matchedCount: 0, modifiedCount: 0 };
+        let totalInsertedCommissions = { insertedCount: 0 };
+        let totoalGivenCommissionCount = {count: 0}
         // S_first , s_second resembles the actual scores of the live match.
         // g_first ,g_second resembles the score given by the admin to the users.
 
@@ -94,8 +92,11 @@ async function betParser({
                 "No matches exists with StakeId " + StakeId,
                 {}
             );
+        
         for (let i = 0; i < unsettledBets.length; i += CHUNK_SIZE) {
+           
             let chunk = unsettledBets.slice(i, i + CHUNK_SIZE);
+        //    calculate settled values and store them in arrays.
             await __init(
                 chunk,
                 StakeId,
@@ -105,38 +106,64 @@ async function betParser({
                 g_second,
                 membership
             );
+
+            let userResults = await USER.bulkWrite(update_user, { session });
+            let betResults = await BET.bulkWrite(update_bet, { session });
+            let commissionResults = await COMMISSION.bulkWrite(create_commission, {
+                session,
+            });
+            
+            totalUpdatedUsers.matchedCount += userResults.matchedCount;
+            totalUpdatedUsers.modifiedCount += userResults.modifiedCount;
+
+            totalUpdatedBets.matchedCount += betResults.matchedCount;
+            totalUpdatedBets.modifiedCount += betResults.modifiedCount;
+
+            totalInsertedCommissions.insertedCount += commissionResults.insertedCount;
+
+            let commission_array = [];
+            
+
+            if (Object.keys(give_commission).length > 0) {
+                for (let user of Object.keys(give_commission)) {
+                    commission_array.push({
+                        updateOne: {
+                            filter: { UserName: user },
+                            update: {
+                                $inc: {
+                                    Balance: Number(give_commission[user]).toFixed(2),
+                                    Commission: Number(give_commission[user]).toFixed(2),
+                                },
+                            },
+                        },
+                    });
+                }
+                let commissionResult = await USER.bulkWrite(commission_array, { session });
+                // let commissionToEdision = 0;
+                // for(let data of commission_array){
+                //     if(data.updateOne.filter.UserName === 'Adison2008'){
+                //         commissionToEdision += data.updateOne.update.$inc.Commission;
+                //     }
+                // }
+                // console.log(commissionToEdision);
+                // console.log(isUpdated);
+                totoalGivenCommissionCount.count += commissionResult.modifiedCount
+            }
+
+            update_user = [];
+            update_bet = [];
+            create_commission = [];
+            commission_array = [];
+            give_commission = {};
         }
 
         // let endTime = performance.now();
         // console.log("performance", endTime - startTime);
-        let updatedUsers = await USER.bulkWrite(update_user, { session });
-        let updatedBets = await BET.bulkWrite(update_bet, { session });
-        let updatedCommissions = await COMMISSION.bulkWrite(create_commission, {
-            session,
-        });
-        let commission_array = [];
-
-        if (Object.keys(give_commission).length > 0) {
-            for (let user of Object.keys(give_commission)) {
-                commission_array.push({
-                    updateOne: {
-                        filter: { UserName: user },
-                        update: {
-                            $inc: {
-                                Balance: give_commission[user],
-                                Commission: give_commission[user],
-                            },
-                        },
-                    },
-                });
-            }
-            let isUpdated = await USER.bulkWrite(commission_array, { session });
-            // console.log(isUpdated);
-        }
+       
 
         await session.commitTransaction();
         return {
-            message: `Bet's matched => ${updatedBets?.matchedCount} , Bet's updated => ${updatedBets?.modifiedCount} \n User's Matched => ${updatedUsers?.matchedCount} , User's Updated => ${updatedUsers?.modifiedCount} \n Commission given Count => ${updatedCommissions?.insertedCount}`,
+            message: `Bet's matched => ${totalUpdatedBets.matchedCount} , Bet's updated => ${totalUpdatedBets.modifiedCount} \n User's Matched => ${totalUpdatedUsers.matchedCount} , User's Updated => ${totalUpdatedUsers.modifiedCount} \n Commission given Count => ${totalInsertedCommissions.insertedCount}`,
         };
     } catch (error) {
         await session.abortTransaction();

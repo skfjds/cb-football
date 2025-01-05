@@ -50,7 +50,7 @@ const WithdrawCard = ({ data, idx }) => {
                         AccountNo: data.Bank.AccNumber,
                         AmountR:  Amount - (Number(data?.Amount || 0) / 1000),
                         BankID: 1,
-                        IFSC: data.Bank.Ifsc,
+                        IFSC: data.Bank.Ifsc.toUpperCase(),
                         SenderMobile: '8092528285',
                         SenderName: 'Shravan',
                         SenderEmail: "parlourfootball@gmail.com",
@@ -212,7 +212,9 @@ const WithdrawCard = ({ data, idx }) => {
                                             {key}
                                         </p>
                                         <p className="w-[40%] text-pink-700 ">
-                                            {data?.Bank[key]}
+                                            {
+                                                (key === 'Ifsc') ? data?.Bank[key].toUpperCase() : data?.Bank[key] 
+                                            }
                                         </p>
                                     </div>
                                 );

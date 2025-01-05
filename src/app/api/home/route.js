@@ -39,6 +39,10 @@ export async function GET(request) {
             status: 200,
             message: "",
             data: { userData, matches: ExtractedMatches },
+        },{
+            headers:{
+                "Cache-Control": "public, max-age=120"
+            }
         });
     } catch (error) {
         if (error?.code === 500 || error?.status === 500 || !error?.status) {

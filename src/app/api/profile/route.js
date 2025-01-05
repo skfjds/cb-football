@@ -39,6 +39,10 @@ export async function GET() {
             status: 200,
             message: "data fetched",
             data: res,
+        }, {
+            headers: {                
+                'Cache-Control': 'public, max-age=30'
+            }
         });
     } catch (error) {
         if (error?.code === 500 || error?.status === 500 || !error?.status) {

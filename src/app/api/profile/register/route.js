@@ -103,6 +103,10 @@ export async function POST(request) {
             status: 200,
             message: "data fetched",
             data: { level1_users, level2_users, level3_users, joinedToday },
+        },{
+            headers: {
+                'Cache-Control': 'public, max-age=120'
+            }
         });
     } catch (error) {
         if (error?.code === 500 || error?.status === 500 || !error?.status) {
