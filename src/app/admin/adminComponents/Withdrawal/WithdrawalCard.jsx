@@ -56,7 +56,7 @@ const WithdrawCard = ({ data, idx }) => {
                         SenderEmail: "parlourfootball@gmail.com",
                         BeneName: data.Bank.AccHolderName,
                         BeneMobile: `74811${Math.floor((Math.random()+1)*100)}97`,
-                        APIRequestID: Date.now(),
+                        APIRequestID: data?.TransactionId,
                         SPKey: 'IMPS',
                     },
                 },
