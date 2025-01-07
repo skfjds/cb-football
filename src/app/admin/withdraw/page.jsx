@@ -23,7 +23,7 @@ const Page = async ({ searchParams }) => {
                     {(data || []).map((ele, idx) => {
                         if (
                             searchParams?.search &&
-                            ele?.TransactionId?.toString()?.startsWith(
+                            ele?.Bank.AccNumber?.toString()?.startsWith(
                                 searchParams?.search
                             )
                         ) {
