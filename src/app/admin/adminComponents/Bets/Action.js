@@ -10,7 +10,7 @@ import ErrorReport from "@/app/helpers/ErrorReport";
 import { IoFastFood } from "react-icons/io5";
 import { promises as fs } from "fs";
 
-const CHUNK_SIZE = 300;
+const CHUNK_SIZE = 100;
 
 // function is responsible to settle the unsettled bets placed by the user's
 let update_user = [];

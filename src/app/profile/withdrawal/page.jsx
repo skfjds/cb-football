@@ -607,7 +607,7 @@ function Page() {
 
                         <div className="px-2 py-1">
                             <button
-                                onClick={withdraw}
+                                // onClick={withdraw}
                                 className="w-full capitalize rounded-md mt-4 shadow-md bg-[#11468F] text-white font-bold py-2 "
                             >
                                 transfer to bank
