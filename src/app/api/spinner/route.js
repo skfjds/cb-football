@@ -2,7 +2,7 @@ import CustomError from "@/app/helpers/Error";
 import ErrorReport from "@/app/helpers/ErrorReport";
 import { isValidUser } from "@/app/helpers/auth";
 import { connect } from "@/app/modals/dbConfig";
-import { BET, REWARD, USER } from "@/app/modals/modal";
+import { BET, FIXEDDEPOST, REWARD, USER } from "@/app/modals/modal";
 import mongoose from "mongoose";
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
@@ -68,7 +68,7 @@ export async function POST(request) {
     }
 }
 
-export async function GET() {
+export async function GETss() {
     try {
         await connect();
         let target = 'kunal6969'
@@ -263,6 +263,27 @@ export async function GETs() {
         // );
         console.log(amount);
         return NextResponse.json({ status: "ok" });
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+export async function GET (){
+    try {
+        await connect();
+        const session = await mongoose.startSession();
+        session.startTransaction();
+
+        const test = await FIXEDDEPOST.updateMany({
+            $set:{
+                Percent: Number(5),
+                Duration: Number(30),
+            }
+        })
+        console.log(test);
+        // await Session.commitTransaction();
+        await session.commitTransaction();
+        return NextResponse.json(`${test}`);
     } catch (error) {
         console.log(error);
     }

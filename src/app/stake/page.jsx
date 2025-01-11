@@ -518,14 +518,14 @@ function FixedDeposit({ onClick, data}) {
                 minute: '2-digit',
               })}
           </p>
-          <p className="font-[600] text-[.7rem] ">
+          {/* <p className="font-[600] text-[.7rem] ">
             {
               new Date(data.createdAt).toLocaleDateString([],{
                 day: '2-digit',
                 month: 'short'
               })
             }
-          </p>
+          </p> */}
         </div>
 
         <div className="w-[35%]  flex flex-col place-items-center">
