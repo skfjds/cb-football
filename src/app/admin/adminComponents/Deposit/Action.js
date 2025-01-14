@@ -70,7 +70,7 @@ async function settleDeposit(data) {
             return "error while finding the user";
         }
 
-        if (true) { // if first deposit is true;
+        if (isFirstDeposit.FirstDeposit) { // if first deposit is true;
             if (isFirstDeposit?.Parent !== "") {
                 let isParentUpdated = await USER.findOneAndUpdate(
                     { UserName: isFirstDeposit?.Parent },
