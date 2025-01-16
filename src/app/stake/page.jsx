@@ -562,7 +562,7 @@ function FixedDeposit({ onClick, data}) {
           style={{ color: "gray" }}
         >
           <p className="line-clamp-1 text-ellipsis">
-            Stake Amount {Number(data?.Amount) / 100 || 0}
+            Stake Amount {Number(data?.Amount).toFixed(2) / 100 || 0}
           </p>
           
           <span className="w-[50%]  text-nowrap flex line-clamp-1 text-ellipsis ">
