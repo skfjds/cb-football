@@ -147,13 +147,13 @@ function Page() {
         getAlert("opps", "Minimum deposit amount 250");
       } else {
         if (selectedOption === "option1") {
-          router.push(
-            `/profile/recharge/paymentChannelOne?data=${encodeURIComponent(
-              inputValue
-            )}`
-          );
+          // router.push(
+          //   `/profile/recharge/paymentChannelOne?data=${encodeURIComponent(
+          //     inputValue
+          //   )}`
+          // );
           // okPay(100, 123);
-          // initiatePayment(inputValue);
+          initiatePayment(inputValue);
         } else if (selectedOption === "option2") {
           router.push(
             `/profile/recharge/paymentChannelTwo?data=${encodeURIComponent(
@@ -306,7 +306,7 @@ function Page() {
             }
 
 
-              <div
+              {/* <div
                 style={{ boxShadow: "0 2px 5px rgb(0,0,0,0.06)" }}
                 className="flex justify-between  px-2 py-3 place-items-center mt-2 w-[98%] mr-auto ml-auto rounded-lg bg-white "
               >
@@ -333,7 +333,7 @@ function Page() {
                   checked={selectedOption === "option3"}
                   onChange={handleOptionChange}
                 />
-              </div>
+              </div> */}
 
               {/* <div
                 style={{ boxShadow: "0 2px 5px rgb(0,0,0,0.06)" }}
