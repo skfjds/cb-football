@@ -125,7 +125,7 @@ export async function scheduleMatches() {
                     FixedPercent: (Math.random() * 6 + 1.5).toFixed(2),
                 };
                 for (let i = 0; i < 17; i++) {
-                    match["Percents"].push((Math.random() * (3 - 3.5) + 3.5).toFixed(2));
+                    match["Percents"].push((Math.random() * (2.5 - 3) + 3).toFixed(2));
                 }
                 data.push(match);
             });
